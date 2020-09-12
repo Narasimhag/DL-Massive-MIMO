@@ -30,9 +30,9 @@ for s = 1:size(datasetSizeRatio,2)
     options.valPercentage = 0.2;
     options.corruption = 'FCNMasking';
     options.fixedMask = 1;
-    options.rawDataFile1 = '';% Path to dataset, example: RawData_64DistAnt_Indoor2_4GHz_16Sub_1Path_from1to502row.mat'
+    options.rawDataFile1 = 'rawData.mat';% Path to dataset, example: RawData_64DistAnt_Indoor2_4GHz_16Sub_1Path_from1to502row.mat'
     options.expTag = '16Sub_64DistAnt_1Path_Case_Spatial24GHz_FCNModel_Exp3';
-    options.trainedNetDir = '~/Documents/MATLAB/MassiveMIMO/Networks/';% path to where to store the trained model
+    options.trainedNetDir = 'Output/';% path to where to store the trained model
     options.learningRate = 1e-3;
     options.dropFactor = 0.1;
     options.weightDecay = 1e-4;
@@ -83,11 +83,10 @@ for s = 1:size(datasetSizeRatio,2)
                 'Shuffle','every-epoch',...
                 'ValidationData',dataset.val,...
                 'ValidationFrequency',options.valFreq,...
-                'ExecutionEnvironment','gpu',...
                 'ValidationPatience', 5,...% Disables automatic training break-off
                 'Plots','none');
 
-    gpuDevice(1)
+%     gpuDevice(1)
     [trainedNet, trainingInfo] = trainNetwork(dataset.train{1,:}, dataset.train{2,:}, net, trainOpt);
     nanLoc = isnan(trainingInfo.ValidationLoss);
     valNMSE = trainingInfo.ValidationLoss(nanLoc);
